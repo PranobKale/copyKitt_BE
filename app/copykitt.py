@@ -81,3 +81,21 @@ def validate_length(prompt:str) -> bool:
 
 if __name__ == "__main__":
    main()
+
+
+# Success! Created your-app-name at M:\copyKitt\copyKitt_BE\your-app-name
+# Inside that directory, you can run several commands:
+
+#   npm run dev
+#     Starts the development server.
+
+#   npm run build
+#     Builds the app for production.
+
+#   npm start
+#     Runs the built app in production mode.
+
+# We suggest that you begin by typing:
+
+#   cd your-app-name
+#   npm run dev
