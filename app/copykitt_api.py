@@ -17,13 +17,15 @@ app.add_middleware(
 
 @app.get("/generate_braanding_snippet")
 async def generate_snippet_api(prompt: str):
-    result = generate_braanding_snippet(prompt)
-    return {"snippet": f"{result}"}
+    snippet = generate_braanding_snippet(prompt)
+    return {"snippet": snippet, "keywords": []}
+
 
 @app.get("/generate_braanding_keywords")
 async def generate_keywords_api(prompt: str):
-    result = generate_keywords(prompt)
-    return {"keywords": f"{result}"}
+    keywords = generate_keywords(prompt)
+    return {"snippet": None, "keywords": keywords}
+
 
 
 @app.get("/generate_braanding_snippets_keywords")
@@ -31,10 +33,7 @@ async def generate_keywords_api(prompt: str):
     validate_length(prompt)
     snippet = generate_braanding_snippet(prompt)
     keywords = generate_keywords(prompt)
-    return {
-            "snippet": f"{snippet}",
-            "keywords": f"{keywords}"
-           }
+    return {"snippet": snippet, "keywords": keywords}
 
 def validate_length(prompt: str):
     if len(prompt) >= Max_INPUT_LENGTH:

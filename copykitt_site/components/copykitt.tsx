@@ -6,21 +6,62 @@ const Copykitt: React.FC = () => {
     
     // api endpoint
     const ENDPOINT: string = 
-    "api path"
+    "http://127.0.0.1:8000"
     
     // react hook
     const [prompt, setPrompt] =  React.useState("");
     const [snippet, setSnippet] =  React.useState("");
     const [keywords, setKeywords] =  React.useState([]);
     const [hasResult, setHasResult] =  React.useState(false);
-    
+    // for loacal
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [error, setError] = React.useState<string | null>(null);
+  
     // after submitting button
+    // const onSubmit = () => {
+    //     console.log("Submitting: "+ prompt);
+    //     fetch(`${ENDPOINT}?prompts=${prompt}`)
+    //     .then((res) => res.json())
+    //     .then(console.log);
+    // };
+
+    // for local adujutment
     const onSubmit = () => {
-        console.log("Submitting: "+ prompt);
-        fetch(`${ENDPOINT}?prompts=${prompt}`)
-        .then((res) => res.json())
-        .then(console.log);
-    };
+        setSnippet('');
+        setKeywords([]);
+        setHasResult(false);
+        setError(null);
+        setIsLoading(true);
+    
+        // Call the three APIs sequentially
+        // fetch(`${ENDPOINT}/generate_braanding_snippet?prompt=${prompt}`)
+        //   .then((res) => res.json())
+        //   .then((data) => {
+        //     setSnippet(data.snippet);
+        //     return fetch(`${ENDPOINT}/generate_braanding_keywords?prompt=${prompt}`);
+        //   })
+          // .then((res) => res.json())
+        fetch(`${ENDPOINT}/generate_braanding_snippets_keywords?prompt=${prompt}`)
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return res.json();
+        })
+        .then((data) => {
+          setKeywords(data.keywords);
+          setSnippet(data.snippet);
+          setHasResult(true);
+        })
+        .catch((err) => {
+          setError('An error occurred while fetching data.');
+          console.error('Error:', err);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+
+      };
     
     const onResult = (data: any) =>{
         setSnippet(data.snippet);
@@ -36,11 +77,11 @@ const Copykitt: React.FC = () => {
     let displayedElement = null;
 
     if (hasResult) {
-        displayedElement = <Results snippet={snippet} keywords={keywords} onBack={onReset} />
+        displayedElement = <Results snippet={snippet} keywords={keywords} onBack={onReset} prompt={prompt}  />
     }
     else{
         displayedElement =(
-            <Form prompt={prompt} setPrompt={setPrompt} onSubmit={onsubmit}/>
+            <Form prompt={prompt} setPrompt={setPrompt} onSubmit={onSubmit}/>
         );
     }
 
