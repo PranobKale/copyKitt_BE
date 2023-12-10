@@ -4,6 +4,8 @@ import Results from "./results";
 
 const Copykitt: React.FC = () => {
     
+    const CHARACTER_LIMIT: number = 32;
+
     // api endpoint
     const ENDPOINT: string = 
     "http://127.0.0.1:8000"
@@ -16,7 +18,7 @@ const Copykitt: React.FC = () => {
     // for loacal
     const [isLoading, setIsLoading] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
-  
+    
     // after submitting button
     // const onSubmit = () => {
     //     console.log("Submitting: "+ prompt);
@@ -67,11 +69,13 @@ const Copykitt: React.FC = () => {
         setSnippet(data.snippet);
         setKeywords(data.keywords);
         setHasResult(true)
+        setIsLoading(false);
     };
 
     const onReset = () =>{
         setPrompt("");
         setHasResult(false);
+        setIsLoading(false);
     };
 
     let displayedElement = null;
@@ -81,7 +85,7 @@ const Copykitt: React.FC = () => {
     }
     else{
         displayedElement =(
-            <Form prompt={prompt} setPrompt={setPrompt} onSubmit={onSubmit}/>
+            <Form prompt={prompt} setPrompt={setPrompt} onSubmit={onSubmit} isLoading={false} characterLimit={CHARACTER_LIMIT}/>
         );
     }
 
